@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/markdown.css">
+    <title>Markdown</title>
+</head>
+
+<body>
+    <!-- sidebar为侧边栏区域，请不要更改 -->
+    <div class="sidebar">
+        <div class="sidebar-title">
+            <span class="sidebar-author">by <a href="http://www.codegorgeous.top"
+                    target="_blank">CodeGorgeous</a></span>
+            <span class="sidebar-github"><a href="https://github.com/CodeGorgeous/Markdown-Html-Transform.git"
+                    target="_blank">GitHub</a></span>
+        </div>
+        <div class="sidebar-content"></div>
+    </div>
+    <div class="markdown-box">
+        <div class="content">
+            <!-- content -->
+        </div>
+        123123213
+    </div>
+    <!-- 控制侧边栏开关 -->
+    <span class="loading-lock">></span>
+    <!-- 回到顶部按钮 -->
+    <div class="backTop">
+        <img src="http://qiniu.codegorgeous.top/top.png" alt="Top">
+    </div>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        const oH1s = $('h1');
+        const sidebar = $('.sidebar-content')
+        let createAs = ''
+        let index = 1
+        for (let i = 0; i < oH1s.length; i++) {
+            createAs += `<div><a href='#item${index++}'>${oH1s[i].outerText}</a></div>`
+        }
+        sidebar.eq(0).append(createAs)
+
+        // 控制侧边栏显示与隐藏
+        const oLock = $('.loading-lock')
+        const oSideBar = $('.sidebar')
+        const oContent = $('.content')
+
+        let lock = false // 默认侧边栏不显示
+        oLock.on('click', () => {
+            if (!lock) { // 缩小
+                oSideBar.css('left', '0')
+                oContent.css('margin-left', '300px')
+                oLock.css('left', '320px')
+                oLock.text('<')
+                lock = true
+            } else {
+                oSideBar.css('left', '-300px')
+                oContent.css('margin-left', '0')
+                oLock.css('left', '20px')
+                oLock.text('>')
+                lock = false
+            }
+        })
+
+        // 设置侧边栏默认选中
+        if ($('a')) {
+            $(`a[href='#item1']`).css('color', '#ff6600')
+        }
+
+        // 回到顶部
+        let oAs = $('.sidebar-content a')
+        let windowHeight = window.innerHeight;
+        let scrollTop;
+        let current;
+        window.addEventListener('scroll', (e) => {
+            scrollTop = $(document).scrollTop();
+            if (scrollTop - windowHeight > 100) {
+                $('.backTop').css('display', 'inline-block')
+            } else {
+                $('.backTop').css('display', 'none')
+            }
+            // 侧边栏某个元素是否亮起
+            const htmlScroolTop = []
+            for (const iterator of oH1s) {
+                let distance = iterator.offsetTop - scrollTop
+                htmlScroolTop.push(Math.abs(distance))
+            }
+            const reslt = Math.min(...htmlScroolTop)
+            const index = htmlScroolTop.indexOf(reslt) + ''
+            current = oAs[index]
+            for (const iterator of oAs) {
+                iterator.style.color = '#0099ff'
+            }
+            current.style.color = '#ff6600'
+        })
+
+
+        $('.backTop').on('click', () => {
+            let timer = null;
+            if (scrollTop - windowHeight > 100) { // 说明现在不处于页面顶部，点击应该scroll为0
+                timer = setInterval(() => {
+                    if (scrollTop <= 0) {
+                        scrollTop = 0
+                        $(document).scrollTop(scrollTop)
+                        clearInterval(timer)
+                    } else {
+                        scrollTop = scrollTop - 100;
+                        $(document).scrollTop(scrollTop)
+                    }
+                });
+            }
+        })
+
+    </script>
+</body>
+
+</html>

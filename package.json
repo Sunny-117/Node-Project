@@ -1,0 +1,8 @@
+{
+	"scripts": {
+		"start": "node target/api.js"
+	},
+	"dependencies": {
+		"marked": "^2.1.3"
+	}
+}
